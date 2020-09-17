@@ -280,19 +280,19 @@ var buclePrincipal = {
                 };
                 if(color==4){
                     //sacar color
-                    stk.fillStyle="#"+ colorLocal.toString(16)+(colorLocal+5).toString(16)+(colorLocal+5).toString(16);
+                    stk.fillStyle="#"+ colorLocal.toString(16)+colorLocal.toString(16)+(colorLocal+5).toString(16)+(colorLocal+5).toString(16)+(colorLocal+5).toString(16)+(colorLocal+5).toString(16);
                 };
                 if(color==3){
                     //sacar color
-                    stk.fillStyle="#"+ colorLocal.toString(16)+colorLocal.toString(16)+(colorLocal+5).toString(16);
+                    stk.fillStyle="#"+ colorLocal.toString(16)+ colorLocal.toString(16)+colorLocal.toString(16)+ colorLocal.toString(16)+(colorLocal+5).toString(16)+ (colorLocal+5).toString(16);
                 };
                 if(color==2){
                     //sacar color
-                    stk.fillStyle="#"+ colorLocal.toString(16)+(colorLocal+5).toString(16)+colorLocal.toString(16);
+                    stk.fillStyle="#"+ colorLocal.toString(16)+ colorLocal.toString(16)+(colorLocal+5).toString(16)+(colorLocal+5).toString(16)+ colorLocal.toString(16)+colorLocal.toString(16);
                 };
                 if(color==1){
                     //sacar color
-                    stk.fillStyle="#"+ (colorLocal+5).toString(16)+colorLocal.toString(16)+colorLocal.toString(16);
+                    stk.fillStyle="#"+ (colorLocal+5).toString(16)+ (colorLocal+5).toString(16)+colorLocal.toString(16)+colorLocal.toString(16)+colorLocal.toString(16)+colorLocal.toString(16);
                 };
                 stk.fillRect(      2.5+(i)*295/17       ,           0.5+(j)*149/13 ,             0.9*295/17     ,            0.9*149/13     );
                 };
