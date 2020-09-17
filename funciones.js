@@ -1,6 +1,9 @@
-var sentido   = 1;
-var direccion = 1;
-var pausa     = 0;
+var sentido            =     1;
+var direccion          =     1;
+var pausa              =     0;
+var ultimaDrieccion    =     1;
+var Velocity           =    12;
+var color              =     0;
 
 var teclawa=2;
 
@@ -77,7 +80,7 @@ var buclePrincipal = {
 
         if(registroTemporal - buclePrincipal.ultimoRegistro > 999) {
             buclePrincipal.ultimoRegistro = registroTemporal;
-            console.log("APS: " + buclePrincipal.aps + "/ FPS: " + buclePrincipal.fps);
+            //console.log("APS: " + buclePrincipal.aps + "/ FPS: " + buclePrincipal.fps);
             buclePrincipal.fps = 0;
             buclePrincipal.aps = 0;
             buclePrincipal.CPA=0;
@@ -87,31 +90,31 @@ var buclePrincipal = {
 
     },
     actualizar: function(registroTemporal) {
-        console.log(teclado.teclas[0]);
+        //console.log(teclado.teclas[0]);
 
-        if(teclado.teclas=="ArrowUp"){
-            if(direccion!=1){
+        if(teclado.teclas=="ArrowUp"||teclado.teclas=="w"){
+            if(ultimaDrieccion!=1){
             direccion  =1;
             sentido    =1;
             };
             pausa      =0;
         };
-        if(teclado.teclas=="ArrowDown"){
-            if(direccion!=1){
+        if(teclado.teclas=="ArrowDown"||teclado.teclas=="s"){
+            if(ultimaDrieccion!=1){
             direccion  =1;
             sentido    =0;
             };
             pausa      =0;
         };
-        if(teclado.teclas=="ArrowLeft"){
-            if(direccion!=0){
+        if(teclado.teclas=="ArrowLeft"||teclado.teclas=="a"){
+            if(ultimaDrieccion!=0){
             direccion  =0;
             sentido    =1;
             };
             pausa      =0;
         };
-        if(teclado.teclas=="ArrowRight"){
-            if(direccion!=0){
+        if(teclado.teclas=="ArrowRight"||teclado.teclas=="d"){
+            if(ultimaDrieccion!=0){
             direccion  =0;
             sentido    =0;
             };
@@ -120,11 +123,23 @@ var buclePrincipal = {
         if(teclado.teclas=="p"){
             pausa      =1;
         };
+        if(teclado.teclas=="W"){
+            color      =0;
+        };
+        if(teclado.teclas=="R"){
+            color      =1;
+        };
+        if(teclado.teclas=="G"){
+            color      =2;
+        };
+        if(teclado.teclas=="B"){
+            color      =3;
+        };
 
         teclado.reiniciar();
         buclePrincipal.aps++;
         buclePrincipal.CPA++;
-        if(buclePrincipal.CPA >= 20){
+        if(buclePrincipal.CPA >= Velocity){
             buclePrincipal.CPA=0;
 
             var X=0;
@@ -155,7 +170,7 @@ var buclePrincipal = {
             //Si esta vacio en frente
 
 
-                if(Grilla[X+XDir][Y+YDir]==0){
+                if(Grilla[X+XDir][Y+YDir]== 0||Grilla[X+XDir][Y+YDir]== 1){
                     Grilla[X+XDir][Y+YDir]=Puntos+1;
 
                     for(i=0; i<Grilla.length;i++ ){
@@ -166,7 +181,7 @@ var buclePrincipal = {
                         };
                     };
                     pasoAlgo=1;
-                    
+                    ultimaDrieccion=direccion;
                 };
 
                 
@@ -218,13 +233,14 @@ var buclePrincipal = {
                     // }
                     //}
                     pasoAlgo=1;
+                    ultimaDrieccion=direccion;
                 };
             };
 
             if(pausa==1){pasoAlgo=1};
 
             if(pasoAlgo==0){
-                console.log("No paso nadaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
+                //console.log("No paso nadaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
                 for(i=0;i<Grilla.length;i++){
                     for(j=0;j<Grilla[i].length;j++){
                         Grilla[i][j]=0;
@@ -237,7 +253,7 @@ var buclePrincipal = {
                 };
             };
             //console.log(document.onkeydown);
-            console.log("Holawa"+Grilla[X+XDir][Y]);
+            //console.log("Holawa"+Grilla[X+XDir][Y]);
         };
         //step();
     },
@@ -254,6 +270,23 @@ var buclePrincipal = {
 
                 if (Grilla[i][j]>0){
                 stk.fillStyle="white";
+                if(color!=0){
+                var puntosLocales = Grilla[i][j];
+                var colorLocal  = Math.floor(puntosLocales*5/(Puntos-1));
+                //var colorCentral    = colorNoCentral+5;
+                };
+                if(color==3){
+                    //sacar color
+                    stk.fillStyle="#"+ colorLocal.toString(16)+colorLocal.toString(16)+(colorLocal+5).toString(16);
+                };
+                if(color==2){
+                    //sacar color
+                    stk.fillStyle="#"+ colorLocal.toString(16)+(colorLocal+5).toString(16)+colorLocal.toString(16);
+                };
+                if(color==1){
+                    //sacar color
+                    stk.fillStyle="#"+ (colorLocal+5).toString(16)+colorLocal.toString(16)+colorLocal.toString(16);
+                };
                 stk.fillRect(      2.5+(i)*295/17       ,           0.5+(j)*149/13 ,             0.9*295/17     ,            0.9*149/13     );
                 };
 
