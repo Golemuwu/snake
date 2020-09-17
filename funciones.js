@@ -138,6 +138,9 @@ var buclePrincipal = {
         if(teclado.teclas=="C"){
             color      =4;
         };
+        if(teclado.teclas=="Y"){
+            color      =5;
+        };
 
         teclado.reiniciar();
         buclePrincipal.aps++;
@@ -279,6 +282,10 @@ var buclePrincipal = {
                 var colorLocal  = Math.floor(puntosLocales*5*17/(Puntos-1)); //-5/(Puntos-1));
                 };
                 if(puntosLocales/Puntos<=2/7){colorLocal=20};
+                if(color==5){
+                    //sacar color
+                    stk.fillStyle="#"+ (colorLocal+170).toString(16,2)       +  (colorLocal+170).toString(16,2)  + (colorLocal).toString(16,2);
+                };
                 if(color==4){
                     //sacar color
                     stk.fillStyle="#"+ colorLocal.toString(16,2)       +  (colorLocal+170).toString(16,2)  + (colorLocal+170).toString(16,2);
