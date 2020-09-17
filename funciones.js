@@ -135,6 +135,9 @@ var buclePrincipal = {
         if(teclado.teclas=="B"){
             color      =3;
         };
+        if(teclado.teclas=="C"){
+            color      =4;
+        };
 
         teclado.reiniciar();
         buclePrincipal.aps++;
@@ -274,6 +277,10 @@ var buclePrincipal = {
                 var puntosLocales = Grilla[i][j];
                 var colorLocal  = Math.floor(puntosLocales*5/(Puntos-1));
                 //var colorCentral    = colorNoCentral+5;
+                };
+                if(color==4){
+                    //sacar color
+                    stk.fillStyle="#"+ colorLocal.toString(16)+(colorLocal+5).toString(16)+(colorLocal+5).toString(16);
                 };
                 if(color==3){
                     //sacar color
