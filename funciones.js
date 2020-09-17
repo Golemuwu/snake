@@ -2,7 +2,7 @@ var sentido            =     1;
 var direccion          =     1;
 var pausa              =     0;
 var ultimaDrieccion    =     1;
-var Velocity           =    12;
+var Velocity           =    15;
 var color              =     0;
 
 var teclawa=2;
