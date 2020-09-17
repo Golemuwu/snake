@@ -275,24 +275,25 @@ var buclePrincipal = {
                 stk.fillStyle="white";
                 if(color!=0){
                 var puntosLocales = Grilla[i][j];
-                var colorLocal  = Math.floor(puntosLocales*5/(Puntos-1));
-                //var colorCentral    = colorNoCentral+5;
+                if (puntosLocales==Puntos){puntosLocales--};
+                var colorLocal  = Math.floor(puntosLocales*5*17/(Puntos-1)); //-5/(Puntos-1));
                 };
+                if(puntosLocales/Puntos<=2/7){colorLocal=20};
                 if(color==4){
                     //sacar color
-                    stk.fillStyle="#"+ colorLocal.toString(16)+colorLocal.toString(16)+(colorLocal+5).toString(16)+(colorLocal+5).toString(16)+(colorLocal+5).toString(16)+(colorLocal+5).toString(16);
+                    stk.fillStyle="#"+ colorLocal.toString(16,2)       +  (colorLocal+170).toString(16,2)  + (colorLocal+170).toString(16,2);
                 };
                 if(color==3){
                     //sacar color
-                    stk.fillStyle="#"+ colorLocal.toString(16)+ colorLocal.toString(16)+colorLocal.toString(16)+ colorLocal.toString(16)+(colorLocal+5).toString(16)+ (colorLocal+5).toString(16);
+                    stk.fillStyle="#"+ colorLocal.toString(16,2)       + colorLocal.toString(16,2)         + (colorLocal+170).toString(16,2);
                 };
                 if(color==2){
                     //sacar color
-                    stk.fillStyle="#"+ colorLocal.toString(16)+ colorLocal.toString(16)+(colorLocal+5).toString(16)+(colorLocal+5).toString(16)+ colorLocal.toString(16)+colorLocal.toString(16);
+                    stk.fillStyle="#"+ colorLocal.toString(16,2)       +   (colorLocal+170).toString(16,2) + colorLocal.toString(16,2);
                 };
                 if(color==1){
                     //sacar color
-                    stk.fillStyle="#"+ (colorLocal+5).toString(16)+ (colorLocal+5).toString(16)+colorLocal.toString(16)+colorLocal.toString(16)+colorLocal.toString(16)+colorLocal.toString(16);
+                    stk.fillStyle="#"+ (colorLocal+170).toString(16) +   colorLocal.toString(16)       + colorLocal.toString(16);
                 };
                 stk.fillRect(      2.5+(i)*295/17       ,           0.5+(j)*149/13 ,             0.9*295/17     ,            0.9*149/13     );
                 };
