@@ -4,6 +4,7 @@ var pausa              =     0;
 var ultimaDrieccion    =     1;
 var Velocity           =    15;
 var color              =     0;
+var MaxPuntos          =     3;
 
 var teclawa=2;
 
@@ -92,6 +93,17 @@ var buclePrincipal = {
     actualizar: function(registroTemporal) {
         //console.log(teclado.teclas[0]);
 
+        //var arriba   =  ( teclado.teclas=="ArrowUp"||teclado.teclas=="w");
+        //var abajo    =  (teclado.teclas=="ArrowDown"||teclado.teclas=="s");
+        //var izquieda =  (teclado.teclas=="ArrowLeft"||teclado.teclas=="a");
+        //var derecha  =  (teclado.teclas=="ArrowRight"||teclado.teclas=="d")
+
+        //direccion    = 1 * ((arriba||abajo) && ultimaDrieccion!=1) + direccion * !(arriba||abajo) *!(izquieda||derecha);
+
+
+        //direccion=1 para arriba, y abajo
+
+
         if(teclado.teclas=="ArrowUp"||teclado.teclas=="w"){
             if(ultimaDrieccion!=1){
             direccion  =1;
@@ -148,7 +160,7 @@ var buclePrincipal = {
         teclado.reiniciar();
         buclePrincipal.aps++;
         buclePrincipal.CPA++;
-        if(buclePrincipal.CPA >= Velocity){
+        if(buclePrincipal.CPA >= Velocity+50*pausa){
             buclePrincipal.CPA=0;
 
             var X=0;
@@ -241,6 +253,7 @@ var buclePrincipal = {
                             //}
                     // }
                     //}
+                    MaxPuntos= (Puntos) * (Puntos >= MaxPuntos)+ (Puntos<MaxPuntos)* MaxPuntos;
                     pasoAlgo=1;
                     ultimaDrieccion=direccion;
                 };
@@ -275,6 +288,7 @@ var buclePrincipal = {
 
         for(i=0;i<NUMX;i++){
             for(j=0;j<NUMY;j++){
+                
 
 
                 if (Grilla[i][j]>0){
@@ -285,30 +299,16 @@ var buclePrincipal = {
                 var colorLocal  = Math.floor(puntosLocales*5*17/(Puntos-1)); //-5/(Puntos-1));
                 };
                 if(puntosLocales/Puntos<=2/7){colorLocal=20};
-                if(color==6){
-                    //sacar color
-                    stk.fillStyle="#"+ (colorLocal+170).toString(16,2)       +  colorLocal.toString(16,2)  + (colorLocal+170).toString(16,2);
-                };
-                if(color==5){
-                    //sacar color
-                    stk.fillStyle="#"+ (colorLocal+170).toString(16,2)       +  (colorLocal+170).toString(16,2)  + (colorLocal).toString(16,2);
-                };
-                if(color==4){
-                    //sacar color
-                    stk.fillStyle="#"+ colorLocal.toString(16,2)       +  (colorLocal+170).toString(16,2)  + (colorLocal+170).toString(16,2);
-                };
-                if(color==3){
-                    //sacar color
-                    stk.fillStyle="#"+ colorLocal.toString(16,2)       + colorLocal.toString(16,2)         + (colorLocal+170).toString(16,2);
-                };
-                if(color==2){
-                    //sacar color
-                    stk.fillStyle="#"+ colorLocal.toString(16,2)       +   (colorLocal+170).toString(16,2) + colorLocal.toString(16,2);
-                };
-                if(color==1){
-                    //sacar color
-                    stk.fillStyle="#"+ (colorLocal+170).toString(16) +   colorLocal.toString(16)       + colorLocal.toString(16);
-                };
+
+                var R,G,B;
+
+                R= colorLocal + 170 * (color==1 || color==5 || color ==6);
+                G= colorLocal + 170 * (color==2 || color==5 || color ==4);
+                B= colorLocal + 170 * (color==3 || color==4 || color ==6);
+
+                stk.fillStyle="#"+ R.toString(16,2)+G.toString(16,2)+B.toString(16,2);
+
+
                 stk.fillRect(      2.5+(i)*295/17       ,           0.5+(j)*149/13 ,             0.9*295/17     ,            0.9*149/13     );
                 };
 
@@ -318,8 +318,17 @@ var buclePrincipal = {
                     };
             };
         };
-        //stk.fillStyle="cyan";
+        stk.fillStyle="cyan";
         //stk.fillRect(2.5,0.5,295,149);
+        //stk.fillRect(0,0,300,150);
+        if(pausa==1){
+            stk.fillRect(75,37.5,150,75);
+            stk.fillStyle="black";
+            stk.fillText("Pause",130,50);
+            stk.fillText("Score: "+( Puntos-3),80,60);
+            stk.fillText("MaxScore: "+( MaxPuntos-3),80,70);
+            stk.fillText("Color: Shift + W/R/G/B/S/C/Y",80,80);
+        };
     },
 }
 
@@ -343,7 +352,7 @@ const POSX=16;
 const POSY=12;
 
 const PUNTINI=3;
-Puntos=PUNTINI;
+var Puntos=PUNTINI;
 
 for(i = 0; i<NUMX; i++){
     var owo = [];
