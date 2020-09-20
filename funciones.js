@@ -21,9 +21,11 @@ function Sonido(nota,time){
    //asignamos el destino para el sonido
    osc.connect(context.destination);
    //iniciamos la nota
+   if(mute==1 && pausa==0){
    osc.start();
    //detenemos la nota medio segundo despues
-   osc.stop(context.currentTime + mute * !(pausa) * time/ Sonidos[nota]);
+   osc.stop(context.currentTime + time/ Sonidos[nota]);
+   }
 
 };
 
