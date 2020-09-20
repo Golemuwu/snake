@@ -23,7 +23,7 @@ function Sonido(nota,time){
    //iniciamos la nota
    osc.start();
    //detenemos la nota medio segundo despues
-   osc.stop(context.currentTime + mute * time/ Sonidos[nota]);
+   osc.stop(context.currentTime + mute * !(pausa) * time/ Sonidos[nota]);
 
 };
 
@@ -128,6 +128,7 @@ var buclePrincipal = {
         direccion = direccion + ((arriba||abajo) && ultimaDrieccion!=1) * (1-direccion)+ ((izquierda||derecha) && ultimaDrieccion!=0) * (0-direccion);
         sentido   = sentido   + ((arriba && ultimaDrieccion!=1) || (izquierda && ultimaDrieccion!=0)) * (1-sentido) + ((abajo && ultimaDrieccion!=1) || (derecha && ultimaDrieccion!=0)) * (0-sentido);
 
+        Sonido(3,20* (teclado.teclas=="p"));
         pausa = pausa + (teclado.teclas=="p") * (1-pausa) + (arriba || abajo || izquierda || derecha)* (0-pausa);
 
         color = color + (teclado.teclas=="W") * (0-color) + (teclado.teclas=="R") * (1-color) + (teclado.teclas=="G") * (2-color) + (teclado.teclas=="B") * (3-color) + (teclado.teclas=="C") * (4-color) + (teclado.teclas=="Y") * (5-color) + (teclado.teclas=="S") * (6-color);
@@ -137,7 +138,9 @@ var buclePrincipal = {
 
         mute= mute + (mute==0 && teclado.teclas=="m") * (1-mute) + (mute==1 && teclado.teclas=="m") * (0-mute);
 
-        Sonido(3,20* (teclado.teclas=="p"));
+        //if(mute==0){
+        //Sonido(3,20* (teclado.teclas=="p"));
+        //}
 
         teclado.reiniciar();
         buclePrincipal.aps++;
