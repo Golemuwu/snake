@@ -5,6 +5,30 @@ var ultimaDrieccion    =     1;
 var Velocity           =    15;
 var color              =     0;
 var MaxPuntos          =     3;
+var Sonidos            = [261,277,293,311,329,349,369,392,415,440,466,493];
+var context = new (window.AudioContext || window.webkitAudioContext)();
+var mute               =     1;
+
+function Sonido(nota,time){
+    //creamos oscilador
+   var osc = context.createOscillator();
+
+   // admite: sine, square, sawtooth, triangle
+   osc.type = 'sine'; 
+
+   osc.frequency.value=Sonidos[nota];
+
+   //asignamos el destino para el sonido
+   osc.connect(context.destination);
+   //iniciamos la nota
+   osc.start();
+   //detenemos la nota medio segundo despues
+   osc.stop(context.currentTime + mute * time/ Sonidos[nota]);
+
+};
+
+var html2 = document.getElementById("Score").innerHTML;
+
 
 var teclawa=2;
 
@@ -42,11 +66,14 @@ function screenfun(tilesX,tilesY, crear){
             escala= dimensiones.alto/tilesY;
     };
 
+    
+
     if(crear == 1){
     var html = document.getElementById("juego").innerHTML;
     var div= "<canvas id= screen></canvas>";
     document.getElementById("juego").innerHTML = html + div;
     };
+    
 
     var margenGrosor = 1;
 
@@ -93,69 +120,24 @@ var buclePrincipal = {
     actualizar: function(registroTemporal) {
         //console.log(teclado.teclas[0]);
 
-        //var arriba   =  ( teclado.teclas=="ArrowUp"||teclado.teclas=="w");
-        //var abajo    =  (teclado.teclas=="ArrowDown"||teclado.teclas=="s");
-        //var izquieda =  (teclado.teclas=="ArrowLeft"||teclado.teclas=="a");
-        //var derecha  =  (teclado.teclas=="ArrowRight"||teclado.teclas=="d")
+        var arriba   =  ( teclado.teclas=="ArrowUp"||teclado.teclas=="w");
+        var abajo    =  (teclado.teclas=="ArrowDown"||teclado.teclas=="s");
+        var izquierda =  (teclado.teclas=="ArrowLeft"||teclado.teclas=="a");
+        var derecha  =  (teclado.teclas=="ArrowRight"||teclado.teclas=="d");
 
-        //direccion    = 1 * ((arriba||abajo) && ultimaDrieccion!=1) + direccion * !(arriba||abajo) *!(izquieda||derecha);
+        direccion = direccion + ((arriba||abajo) && ultimaDrieccion!=1) * (1-direccion)+ ((izquierda||derecha) && ultimaDrieccion!=0) * (0-direccion);
+        sentido   = sentido   + ((arriba && ultimaDrieccion!=1) || (izquierda && ultimaDrieccion!=0)) * (1-sentido) + ((abajo && ultimaDrieccion!=1) || (derecha && ultimaDrieccion!=0)) * (0-sentido);
 
+        pausa = pausa + (teclado.teclas=="p") * (1-pausa) + (arriba || abajo || izquierda || derecha)* (0-pausa);
 
-        //direccion=1 para arriba, y abajo
+        color = color + (teclado.teclas=="W") * (0-color) + (teclado.teclas=="R") * (1-color) + (teclado.teclas=="G") * (2-color) + (teclado.teclas=="B") * (3-color) + (teclado.teclas=="C") * (4-color) + (teclado.teclas=="Y") * (5-color) + (teclado.teclas=="S") * (6-color);
 
+        //if(mute==0 && teclado.teclas=="m"){mute=1};
+        //if(mute==1 && teclado.teclas=="m"){mute=0};
 
-        if(teclado.teclas=="ArrowUp"||teclado.teclas=="w"){
-            if(ultimaDrieccion!=1){
-            direccion  =1;
-            sentido    =1;
-            };
-            pausa      =0;
-        };
-        if(teclado.teclas=="ArrowDown"||teclado.teclas=="s"){
-            if(ultimaDrieccion!=1){
-            direccion  =1;
-            sentido    =0;
-            };
-            pausa      =0;
-        };
-        if(teclado.teclas=="ArrowLeft"||teclado.teclas=="a"){
-            if(ultimaDrieccion!=0){
-            direccion  =0;
-            sentido    =1;
-            };
-            pausa      =0;
-        };
-        if(teclado.teclas=="ArrowRight"||teclado.teclas=="d"){
-            if(ultimaDrieccion!=0){
-            direccion  =0;
-            sentido    =0;
-            };
-            pausa      =0;
-        };
-        if(teclado.teclas=="p"){
-            pausa      =1;
-        };
-        if(teclado.teclas=="W"){
-            color      =0;
-        };
-        if(teclado.teclas=="R"){
-            color      =1;
-        };
-        if(teclado.teclas=="G"){
-            color      =2;
-        };
-        if(teclado.teclas=="B"){
-            color      =3;
-        };
-        if(teclado.teclas=="C"){
-            color      =4;
-        };
-        if(teclado.teclas=="Y"){
-            color      =5;
-        };
-        if(teclado.teclas=="S"){
-            color      =6;
-        };
+        mute= mute + (mute==0 && teclado.teclas=="m") * (1-mute) + (mute==1 && teclado.teclas=="m") * (0-mute);
+
+        Sonido(3,20* (teclado.teclas=="p"));
 
         teclado.reiniciar();
         buclePrincipal.aps++;
@@ -196,9 +178,7 @@ var buclePrincipal = {
 
                     for(i=0; i<Grilla.length;i++ ){
                         for(j=0; j<Grilla[i].length;j++){
-                            if(Grilla[i][j]>0){
-                                Grilla[i][j]-=1;
-                            };
+                            Grilla[i][j]= (Grilla[i][j]-1) * (Grilla[i][j]>0) +(Grilla[i][j]<=0) * Grilla[i][j] ;
                         };
                     };
                     pasoAlgo=1;
@@ -256,6 +236,7 @@ var buclePrincipal = {
                     MaxPuntos= (Puntos) * (Puntos >= MaxPuntos)+ (Puntos<MaxPuntos)* MaxPuntos;
                     pasoAlgo=1;
                     ultimaDrieccion=direccion;
+                    Sonido(6,20);
                 };
             };
 
@@ -273,6 +254,7 @@ var buclePrincipal = {
                         Grilla[4][POSY]=-1
                     };
                 };
+                Sonido(0,40);
             };
             //console.log(document.onkeydown);
             //console.log("Holawa"+Grilla[X+XDir][Y]);
@@ -285,6 +267,11 @@ var buclePrincipal = {
         stk.fillStyle="black";
         stk.fillRect(0,0,escala*11,escala*12);
 
+        var div2 = "<h1><font face="+ '"Arial"'+ ">Score: "+ (Puntos-3).toString()+"</h1>";
+        document.getElementById("Score").innerHTML = div2;
+
+        
+
 
         for(i=0;i<NUMX;i++){
             for(j=0;j<NUMY;j++){
@@ -295,10 +282,12 @@ var buclePrincipal = {
                 stk.fillStyle="white";
                 if(color!=0){
                 var puntosLocales = Grilla[i][j];
-                if (puntosLocales==Puntos){puntosLocales--};
-                var colorLocal  = Math.floor(puntosLocales*5*17/(Puntos-1)); //-5/(Puntos-1));
+                //if (puntosLocales==Puntos){puntosLocales--};
+                puntosLocales = puntosLocales- (puntosLocales==Puntos);
+                var colorLocal  = Math.floor(puntosLocales*5*17/(Puntos-1))  * (puntosLocales/Puntos>2/7) + (puntosLocales/Puntos<=2/7 && puntosLocales != 1) * Math.floor(15 * (puntosLocales-1)/(2/7*Puntos-1)+20);
+                colorLocal = colorLocal * (puntosLocales != 1)+ 16 * (puntosLocales==1);
                 };
-                if(puntosLocales/Puntos<=2/7){colorLocal=20};
+                //if(puntosLocales/Puntos<=2/7){colorLocal=20};
 
                 var R,G,B;
 
@@ -328,6 +317,9 @@ var buclePrincipal = {
             stk.fillText("Score: "+( Puntos-3),80,60);
             stk.fillText("MaxScore: "+( MaxPuntos-3),80,70);
             stk.fillText("Color: Shift + W/R/G/B/S/C/Y",80,80);
+            var muted="on";
+            if(mute==1){muted="off"}
+            stk.fillText("Mute("+ muted + "): M"  ,80,90);
         };
     },
 }
